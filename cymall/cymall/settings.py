@@ -6,6 +6,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 # 将apps目录注册到BASE_DIR
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+# print(BASE_DIR, '***', sys.path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -188,8 +189,15 @@ SESSION_CACHE_ALIAS = "session"
 
 REST_FRAMEWORK = {
     # 异常处理
-    'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.exception_handler',
+    'EXCEPTION_HANDLER': 'utils.exceptions.exception_handler',
+
+
+    # 接口文档
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
 }
+
 
 # 使用继承自django的自定义用户认证系统
 AUTH_USER_MODEL = 'users.User'
+

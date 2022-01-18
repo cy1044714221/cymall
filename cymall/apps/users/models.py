@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
-    phone_num = models.CharField(max_length=11, verbose_name='手机号码')
+    phone_num = models.CharField(max_length=11, unique=True, verbose_name='手机号码')
     email_active = models.BooleanField(default=False, verbose_name='邮箱是否激活')
 
     class Meta:
