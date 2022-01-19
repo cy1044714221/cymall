@@ -206,10 +206,16 @@ REST_FRAMEWORK = {
 
 }
 
-# JWT_EXPIRATION_DELTA 指明token的有效期
+
 JWT_AUTH = {
+    # JWT_EXPIRATION_DELTA 指明token的有效期
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
+
+    # 修改jwt登陆视图 增加响应参数
+    'JWT_RESPONSE_PAYLOAD_HANDLER' : 'users.utils.jwt_response_payload_handler',
 }
 
 # 使用继承自django的自定义用户认证系统
 AUTH_USER_MODEL = 'users.User'
+
+
