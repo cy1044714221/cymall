@@ -62,3 +62,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """用户详情序列化器"""
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'phone_num', 'email', 'email_active']
