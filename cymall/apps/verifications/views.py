@@ -25,5 +25,5 @@ class SMSCodeView(APIView):
         pl.setex('send_flag_%s' % mobile, 60, 1)
         pl.execute()
         aliyun_send_sms_codes.delay(mobile, sms_code)
-
-        return Response({'message': 'ok' + sms_code}, status=status.HTTP_202_ACCEPTED)
+        # 上线删除 'sms_code': sms_code
+        return Response({'message': 'ok', 'sms_code': sms_code}, status=status.HTTP_202_ACCEPTED)

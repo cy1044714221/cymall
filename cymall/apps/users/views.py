@@ -4,12 +4,15 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
-from .serializers import CreateUserSerializer, UserDetailSerializer
+from .serializers import CreateUserSerializer, UserDetailSerializer, EmailSerializer
+
+from cymall.utils.signature import Signature
 
 
 class UsernameCountView(APIView):
@@ -31,6 +34,39 @@ class UserView(CreateAPIView):
 
 class UserDetailView(RetrieveAPIView):
     """用户详情"""
-    def get_object(self): # 重写方法 从前端获取user
+
+    def get_object(self):  # 重写方法 从前端获取user
         return self.request.user
+
     serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class EmaillView(UpdateAPIView):
+    """更新邮箱"""
+
+    def get_object(self):  # 重写方法 从前端获取user
+        return self.request.user
+
+    serializer_class = EmailSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class EmailVerifylView(APIView):
+    """验证邮箱"""
+
+    def get(self, request):
+        token = request.query_params.get('token')
+        if not token:
+            return Response({'message': 'token无效'}, status=status.HTTP_400_BAD_REQUEST)
+        data = Signature(300).decryption_fields(token=token)
+        if data is None:
+            return Response({'message': '链接信息无效'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                user = User.objects.get(**data)
+            except User.DoesNotExist:
+                return Response({'message': '用户信息不正确'})
+            user.email_active = True
+            user.save()
+            return Response({'message': 'OK'})

@@ -13,5 +13,11 @@ urlpatterns = [
     # 用户详情
     path('user', views.UserDetailView.as_view()),
 
+    # 修改/验证 邮箱
+    path('email', views.EmaillView.as_view()),
+
+    # 验证邮箱
+    path('email_verify_url', views.EmailVerifylView.as_view()),
+
 
 ]

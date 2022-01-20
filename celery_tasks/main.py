@@ -12,4 +12,4 @@ celery_app = Celery('cymall')
 celery_app.config_from_object('celery_tasks.config')
 
 # 自动注册celery任务
-celery_app.autodiscover_tasks(['celery_tasks.aliyun_sms',])
+celery_app.autodiscover_tasks(['celery_tasks.aliyun_sms','celery_tasks.aliyun_email'])

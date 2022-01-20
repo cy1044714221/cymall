@@ -258,4 +258,4 @@ EMAIL_HOST_USER = '1044714221@qq.com'
 # 在邮箱中设置的客户端授权密码
 EMAIL_HOST_PASSWORD = 'svssrerjpwrbbbgb'
 # 收件人看到的发件人
-EMAIL_FROM = '<1044714221@qq.com>'  # QQ邮箱不让修改from头，
+EMAIL_FROM = 'cymall<1044714221@qq.com>'  # QQ邮箱不让修改from头，

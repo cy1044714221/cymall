@@ -2,8 +2,8 @@ import re
 from rest_framework import serializers
 from django_redis import get_redis_connection
 from rest_framework_jwt.settings import api_settings
-# from celery_tasks.email.tasks import send_verify_email
-from utils.signature import Signature
+from celery_tasks.email.tasks import send_verify_email
+from cymall.utils.signature import Signature
 from .models import User
 
 
@@ -95,7 +95,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 class EmailSerializer(serializers.ModelSerializer):
-    """"""
+    """更新验证邮箱"""
 
     class Meta:
         model = User
@@ -110,10 +110,15 @@ class EmailSerializer(serializers.ModelSerializer):
         """重写方法， 增加发送邮件"""
         instance.email = validated_data.get('email')
         instance.save()
+
         # 增加校验邮箱
         data = {'id': instance.id, 'email': instance.email}
         token = Signature(300).encrypted_fields(data)
+
         # 生成邮箱激活链接
         verify_email_url = '127.0.0.1:8000/email_verify_url?token=' + token
         send_verify_email.delay(instance.email, verify_url=verify_email_url)
+
         return instance
+
+
