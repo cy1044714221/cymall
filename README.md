@@ -1,6 +1,6 @@
 # cymall
 
- 接口文档地址： https://docs.apipost.cn/preview/f4e71a915f4bc1c5/fd621d21a7773ecf
+ 接口文档地址：https://docs.apipost.cn/preview/5b85d84bdc1e5901/24accefefc0337d4
 
 # 应用介绍
 
@@ -19,3 +19,11 @@
 # 错误代码
 
 507  DatabaseError / RedisError
+
+
+
+
+
+# QQ登陆
+
+![流程图](/Users/phoenix/Downloads/流程图.jpg)
