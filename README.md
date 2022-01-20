@@ -26,4 +26,3 @@
 
 # QQ登陆
 
-![流程图](/Users/phoenix/Downloads/流程图.jpg)
