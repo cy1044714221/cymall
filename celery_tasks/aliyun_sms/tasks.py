@@ -1,7 +1,5 @@
 # 编辑异步任务
-# from celery_tasks.aliyun_sms.aliyun_sms import AliyunSms
 from celery_tasks.main import celery_app
-from celery_tasks.aliyun_sms.aliyun_sms import AliyunSms
 
 
 @celery_app.task(name='aliyun_send_sms_codes')
