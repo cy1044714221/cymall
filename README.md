@@ -1,6 +1,6 @@
 # cymall
 
- 接口文档地址：https://docs.apipost.cn/preview/5b85d84bdc1e5901/24accefefc0337d4
+ 接口文档地址：https://docs.apipost.cn/preview/8db01ee5f6b4b970/cacf4cf6e235dd09
 
 # 应用介绍
 
