@@ -1,17 +1,21 @@
 import re
-
 from rest_framework import serializers
+from django_redis import get_redis_connection
+from rest_framework_jwt.settings import api_settings
+# from celery_tasks.email.tasks import send_verify_email
+from utils.signature import Signature
 from .models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(label='确认密码', write_only=True)
     sms_code = serializers.CharField(label='短信验证码', write_only=True, help_text="测试填写: 123456 ", )
     allow = serializers.CharField(label='同意协议', write_only=True, help_text="测试填写: true ", )
+    token = serializers.CharField(label='token', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'password2', 'sms_code', 'phone_num', 'allow']
+        fields = ['id', 'username', 'password', 'password2', 'sms_code', 'mobile', 'allow', 'token']
 
         extra_kwargs = {
             'username': {
@@ -38,12 +42,22 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
 
         """校验手机号码"""
-        if not re.match(r'1[3-9]\d{9}$', attrs['phone_num']):
+        if not re.match(r'1[3-9]\d{9}$', attrs['mobile']):
             raise serializers.ValidationError('手机号码格式错误')
+
         """校验两次密码"""
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError('两个密码不一致')
+
         """校验短信验证码"""
+        redis_conn = get_redis_connection('sms_codes')
+        mobile = attrs['mobile']
+        real_sms_code = redis_conn.get('sms_%s' % mobile)
+        if real_sms_code is None:
+            raise serializers.ValidationError('短信验证码无效')
+        # 上线去掉 or 123456 万能验证码
+        if attrs['sms_code'] != real_sms_code.decode():  # 验证码从redis取出需要解码, 如果为空不能decode()
+            raise serializers.ValidationError('验证码错误')
 
         """校验同意协议"""
         if attrs['allow'] != 'true':
@@ -61,6 +75,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
 
+        # 手动签发JWT
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER  # 引用函数，生成payload
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER  # 引用函数，生成JWT
+
+        payload = jwt_payload_handler(user)  # 根据user生成载荷
+        token = jwt_encode_handler(payload)  # 传入载荷 生成完整的JW
+        user.token = token  # 给前端发挥信息时候增加jwt token
+
         return user
 
 
@@ -69,4 +91,29 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'phone_num', 'email', 'email_active']
+        fields = ['id', 'username', 'mobile', 'email', 'email_active']
+
+
+class EmailSerializer(serializers.ModelSerializer):
+    """"""
+
+    class Meta:
+        model = User
+        fields = ['id', 'email']
+        extra_kwargs = {
+            'email': {
+                'required': True
+            },
+        }
+
+    def update(self, instance, validated_data):
+        """重写方法， 增加发送邮件"""
+        instance.email = validated_data.get('email')
+        instance.save()
+        # 增加校验邮箱
+        data = {'id': instance.id, 'email': instance.email}
+        token = Signature(300).encrypted_fields(data)
+        # 生成邮箱激活链接
+        verify_email_url = '127.0.0.1:8000/email_verify_url?token=' + token
+        send_verify_email.delay(instance.email, verify_url=verify_email_url)
+        return instance
