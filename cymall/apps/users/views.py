@@ -34,7 +34,6 @@ class UserView(CreateAPIView):
 
 class UserDetailView(RetrieveAPIView):
     """用户详情"""
-
     def get_object(self):  # 重写方法 从前端获取user
         return self.request.user
 
@@ -44,7 +43,6 @@ class UserDetailView(RetrieveAPIView):
 
 class EmaillView(UpdateAPIView):
     """更新邮箱"""
-
     def get_object(self):  # 重写方法 从前端获取user
         return self.request.user
 
@@ -54,7 +52,6 @@ class EmaillView(UpdateAPIView):
 
 class EmailVerifylView(APIView):
     """验证邮箱"""
-
     def get(self, request):
         token = request.query_params.get('token')
         if not token:

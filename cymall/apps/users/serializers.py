@@ -55,7 +55,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         real_sms_code = redis_conn.get('sms_%s' % mobile)
         if real_sms_code is None:
             raise serializers.ValidationError('短信验证码无效')
-        # 上线去掉 or 123456 万能验证码
         if attrs['sms_code'] != real_sms_code.decode():  # 验证码从redis取出需要解码, 如果为空不能decode()
             raise serializers.ValidationError('验证码错误')
 
@@ -66,7 +65,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # 校验ok之后删除不需要写入数据库的参数
         del validated_data['password2']
         del validated_data['sms_code']
         del validated_data['allow']
@@ -88,10 +86,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """用户详情序列化器"""
+    token = serializers.CharField(label='token', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'mobile', 'email', 'email_active']
+        fields = ['id', 'username', 'mobile', 'email', 'email_active', 'token']
 
 
 class EmailSerializer(serializers.ModelSerializer):
@@ -120,5 +119,3 @@ class EmailSerializer(serializers.ModelSerializer):
         send_verify_email.delay(instance.email, verify_url=verify_email_url)
 
         return instance
-
-

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域CORS
 
     'users',  # 用户模块
+    'oauth',  # qq用户登陆数据
 
 ]
 
@@ -258,4 +259,9 @@ EMAIL_HOST_USER = '1044714221@qq.com'
 # 在邮箱中设置的客户端授权密码
 EMAIL_HOST_PASSWORD = 'svssrerjpwrbbbgb'
 # 收件人看到的发件人
-EMAIL_FROM = 'cymall<1044714221@qq.com>'  # QQ邮箱不让修改from头，
+EMAIL_FROM = 'cymall<1044714221@qq.com>'
+
+# qq登陆参数配置
+QQ_CLIENT_ID = '101457837'
+QQ_CLIENT_SECRET = '09b395a2b40f391789ca3377fa364e1e'
+QQ_REDIRECT_URI = 'https://004cn.cn/web/index.php'
