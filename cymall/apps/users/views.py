@@ -9,8 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import User
-from .serializers import CreateUserSerializer, UserDetailSerializer, EmailSerializer
+from .models import User, Address
+from .serializers import CreateUserSerializer, UserDetailSerializer, EmailSerializer, AddressSerializer
 
 from cymall.utils.signature import Signature
 
@@ -34,15 +34,16 @@ class UserView(CreateAPIView):
 
 class UserDetailView(RetrieveAPIView):
     """用户详情"""
-    def get_object(self):  # 重写方法 从前端获取user
-        return self.request.user
-
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_object(self):  # 重写方法 从前端获取user
+        return self.request.user
 
 
 class EmaillView(UpdateAPIView):
     """更新邮箱"""
+
     def get_object(self):  # 重写方法 从前端获取user
         return self.request.user
 
@@ -52,6 +53,7 @@ class EmaillView(UpdateAPIView):
 
 class EmailVerifylView(APIView):
     """验证邮箱"""
+
     def get(self, request):
         token = request.query_params.get('token')
         if not token:
@@ -67,3 +69,47 @@ class EmailVerifylView(APIView):
             user.email_active = True
             user.save()
             return Response({'message': 'OK'})
+
+
+# 用户地址新增 / 修改
+class AddressView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, requst):
+        """新建用户地址"""
+        serializer = AddressSerializer(data=requst.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        """获取用户地址信息"""
+        default_address = request.user.default_address
+        address = Address.objects.filter(user=request.user.id, is_deleted=False)
+        serializer = AddressSerializer(address, many=True)
+        data = {
+            'user_id': request.user.id,
+            'default_address': default_address,
+            'addresses': serializer.data
+        }
+        return Response(data)
+
+
+class AddressDetailView(UpdateAPIView):
+    """
+    put:修改地址
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user.id, is_deleted=False)
+
+    serializer_class = AddressSerializer
+
+    def delete(self, request, pk):
+        """逻辑删除"""
+        address = self.get_object()
+        # 进行逻辑删除
+        address.is_deleted = True
+        address.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

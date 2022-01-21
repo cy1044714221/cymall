@@ -19,5 +19,10 @@ urlpatterns = [
     # 验证邮箱
     path('email_verify_url', views.EmailVerifylView.as_view()),
 
+    # 地址
+    path('addresses', views.AddressView.as_view()),
+
+    # 地址详情
+    path('addresses/<pk>', views.AddressDetailView.as_view()),
 
 ]

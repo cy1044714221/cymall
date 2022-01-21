@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'users',  # 用户模块
     'oauth',  # qq用户登陆数据
+    'areas',  # 地址模块
 
 ]
 
@@ -205,7 +206,14 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    }
+    },
+    "areas": {  # 缓存地址
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 # 异步任务队列 "redis://localhost:6379/7"
 
@@ -265,3 +273,11 @@ EMAIL_FROM = 'cymall<1044714221@qq.com>'
 QQ_CLIENT_ID = '101457837'
 QQ_CLIENT_SECRET = '09b395a2b40f391789ca3377fa364e1e'
 QQ_REDIRECT_URI = 'https://004cn.cn/web/index.php'
+
+# DRF扩展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60 * 24,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
+}

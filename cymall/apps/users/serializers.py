@@ -4,7 +4,7 @@ from django_redis import get_redis_connection
 from rest_framework_jwt.settings import api_settings
 from celery_tasks.email.tasks import send_verify_email
 from cymall.utils.signature import Signature
-from .models import User
+from .models import User, Address
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -119,3 +119,41 @@ class EmailSerializer(serializers.ModelSerializer):
         send_verify_email.delay(instance.email, verify_url=verify_email_url)
 
         return instance
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    # 省市区 和 对应ID
+    province = serializers.StringRelatedField(read_only=True)
+    city = serializers.StringRelatedField(read_only=True)
+    district = serializers.StringRelatedField(read_only=True)
+    province_id = serializers.IntegerField(label='省ID', required=True)
+    city_id = serializers.IntegerField(label='市ID', required=True)
+    district_id = serializers.IntegerField(label='区ID', required=True)
+
+    class Meta:
+        model = Address
+        # " id -user addressee province city district place mobile -is_deleted -create_date -update_date"
+        fields = ['id', 'addressee', 'province', 'city', 'district', 'province_id', 'city_id', 'district_id', 'place',
+                  'mobile']
+
+    def validate_mobile(self, value):
+        """
+        验证手机号
+        """
+        if not re.match(r'^1[3-9]\d{9}$', value):
+            raise serializers.ValidationError('手机号格式错误')
+        return value
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        # 如果地址存在 返回原来到地址， 如果不存在 新建
+        try:
+            address_a = Address.objects.get(**validated_data)
+        except:
+            address_a = None
+        if address_a:
+            address = address_a
+        else:
+            address = super().create(validated_data)
+        return address
