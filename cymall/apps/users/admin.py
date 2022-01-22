@@ -8,7 +8,7 @@ admin.site.index_title = 'CyMall 商城-后台管理'
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'mobile', 'email', 'last_login', 'is_active',
+    list_display = ['id', 'username', 'mobile', 'email', 'is_staff', 'last_login', 'is_active',
                     'date_joined', 'email_active', 'default_address']
 
     list_editable = ('is_active', 'email_active',)

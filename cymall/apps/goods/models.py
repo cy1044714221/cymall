@@ -1,5 +1,6 @@
 from django.db import models
-
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class BaseModel(models.Model):
     """ 父类 给后续模型增加两个字段 """
@@ -50,6 +51,7 @@ class Goods(BaseModel):
                                   verbose_name='三级类别')
     sales = models.IntegerField(default=0, verbose_name='销量')
     comments = models.IntegerField(default=0, verbose_name='评价数')
+    desc_detail = RichTextUploadingField(default='', verbose_name='详细介绍')
 
     class Meta:
         db_table = 'cy_goods_spu'

@@ -22,12 +22,13 @@ from rest_framework_jwt.views import obtain_jwt_token
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
-    re_path(r'^docs/', include_docs_urls(title='API文档')),
+    # re_path(r'^docs/', include_docs_urls(title='API文档')),
+    re_path(r'^', include_docs_urls(title='API文档')),
 
     # JWT签发
     re_path(r'^authorizations$', obtain_jwt_token),
-
 
     path('', include('users.urls')),
 

@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  # 跨域CORS
 
-    'xadmin',
+    'ckeditor',  # 富文本编辑器
+    'ckeditor_uploader',  # 富文本编辑器上传图片模块
 
     'users',  # 用户模块
     'oauth',  # qq用户登陆数据
@@ -286,3 +287,23 @@ REST_FRAMEWORK_EXTENSIONS = {
     # 缓存存储
     'DEFAULT_USE_CACHE': 'default',
 }
+
+
+# django文件存储
+DEFAULT_FILE_STORAGE = 'cymall.utils.fastdfs.fafs_storage.FastDFSStorage'
+
+# FastDFS
+FDFS_URL = 'http://192.168.0.104:8888/'
+# FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
+FDFS_CLIENT_CONF = '/Users/phoenix/Desktop/mall/cymall/utils/fastdfs/client.conf'
+
+
+# 富文本编辑器ckeditor配置
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # 工具条功能
+        'height': 300,  # 编辑器高度
+        # 'width': 300,  # 编辑器宽
+    },
+}
+CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所以此处设为''

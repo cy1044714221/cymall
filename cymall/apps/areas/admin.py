@@ -5,7 +5,6 @@ from .models import Area
 
 
 class AreaAdmin(admin.ModelAdmin):
-
     list_display = ["id", "name", 'parent_area']
 
     list_per_page = 10
@@ -21,7 +20,6 @@ class AreaAdmin(admin.ModelAdmin):
     #     ('高级', {'fields': ('parent',)}),
     # )
     autocomplete_fields = ['parent']
-
 
 
 # 注册Model类
