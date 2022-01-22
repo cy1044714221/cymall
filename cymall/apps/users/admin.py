@@ -1,9 +1,9 @@
 from django.contrib import admin
 from .models import User, Address
 
-admin.site.site_header = 'xx 项目管理系统'
-admin.site.site_title = '登录系统后台'
-admin.site.index_title = '后台管理'
+admin.site.site_header = 'CyMall 商城'
+admin.site.site_title = 'CyMall 商城-登录系统后台'
+admin.site.index_title = 'CyMall 商城-后台管理'
 
 
 @admin.register(User)
@@ -25,7 +25,7 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('基本', {'fields': ('username', 'mobile', 'email', 'password',)}),
-        ('高级', {'fields': ('last_login', 'is_active', 'date_joined', 'email_active', 'default_address')}),
+        ('高级', {'fields': (('date_joined', 'last_login'), ('is_active', 'email_active'), 'default_address')}),
     )
 
 
@@ -34,10 +34,12 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'addressee', 'province', 'city', 'district', 'place', 'mobile', 'is_deleted',
                     'create_date', 'update_date']
     list_display_links = ['id', 'addressee']
+    fields = ('user', 'addressee', ('province', 'city', 'district'), 'place', 'mobile', 'is_deleted')
     actions_on_top = False
     actions_on_bottom = False
     search_fields = ['addressee', 'mobile', 'place']
     autocomplete_fields = ['province', 'city', 'district', ]
     # list_filter = ['is_deleted']
 
+    actions_selection_counter = True
     pass

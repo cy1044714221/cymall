@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'users',  # 用户模块
     'oauth',  # qq用户登陆数据
     'areas',  # 地址模块
+    'goods',  # 商品模块
 
 
 
