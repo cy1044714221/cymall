@@ -46,9 +46,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  # 跨域CORS
 
+    'xadmin',
+
     'users',  # 用户模块
     'oauth',  # qq用户登陆数据
     'areas',  # 地址模块
+
+
 
 ]
 

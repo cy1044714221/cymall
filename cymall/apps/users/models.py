@@ -33,3 +33,6 @@ class Address(models.Model):
         verbose_name = '用户地址'
         verbose_name_plural = verbose_name
         ordering = ['-update_date']
+
+    def __str__(self):
+        return self.addressee
