@@ -28,6 +28,14 @@ class UserAdmin(admin.ModelAdmin):
         ('高级', {'fields': (('date_joined', 'last_login'), ('is_active', 'email_active'), 'default_address')}),
     )
 
+    '''自定义actions'''
+    actions = ['setup_staff']
+
+    def setup_staff(self, request, queryset):
+        queryset.update(is_staff=True)
+
+    setup_staff.short_description = '设为工作人员'
+
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
