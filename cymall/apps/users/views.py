@@ -108,7 +108,7 @@ class AddressView(APIView):
         serializer = AddressSerializer(address, many=True)
         data = {
             'user_id': request.user.id,
-            'default_address': default_address,
+            'default_address': default_address.id,
             'addresses': serializer.data
         }
         return Response(data)

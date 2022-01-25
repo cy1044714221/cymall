@@ -7,9 +7,6 @@ admin.site.site_title = 'CyMall 商城-登录系统后台'
 admin.site.index_title = 'CyMall 商城-后台管理'
 
 
-
-
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['id', 'username', 'mobile', 'email', 'is_staff', 'last_login', 'is_active',
@@ -26,10 +23,13 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'email_active', 'is_staff']
 
     search_fields = ['username', 'mobile']
-
     fieldsets = (
-        ('基本', {'fields': ('username', 'mobile', 'email', 'password',)}),
-        ('高级', {'fields': (('date_joined', 'last_login'), ('is_active', 'email_active'), 'default_address')}),
+        ('基本', {'fields': ('username', 'password')}),
+        ('个人信息', {'fields': ('first_name', 'last_name', 'email', 'last_login',
+                             'date_joined', 'email_active', 'default_address')}),
+        ('权限', {
+            'fields': (('is_active', 'is_staff', 'is_superuser'), 'groups', 'user_permissions'),
+        }),
     )
 
     '''自定义actions'''
