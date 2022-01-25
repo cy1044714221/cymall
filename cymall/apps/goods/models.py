@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
+
 class BaseModel(models.Model):
     """ 父类 给后续模型增加两个字段 """
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -74,7 +75,8 @@ class SKU(BaseModel):
     comments = models.IntegerField(default=0, verbose_name='评价数')
     is_launched = models.BooleanField(default=True, verbose_name='是否上架销售')
     default_image_url = models.CharField(max_length=200, default='', null=True, blank=True, verbose_name='默认图片')
-   # name  caption goods category price stock sales comments is_launched default_image_url
+
+    # name  caption goods category price stock sales comments is_launched default_image_url
     class Meta:
         db_table = 'cy_goods_sku'
         verbose_name = '商品SKU'

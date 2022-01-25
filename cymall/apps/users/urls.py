@@ -6,6 +6,8 @@ urlpatterns = [
     # 注册用户名是否已经存在
     # re_path(r'usernames/(?P<username>\w{5,20})/count', views.UsernameCountView.as_view()),
     path('usernames/<username>/count', views.UsernameCountView.as_view()),
+    path('account/<pk>', views.AccountView.as_view()),
+
 
     # 用户注册
     path('users', views.UserView.as_view()),

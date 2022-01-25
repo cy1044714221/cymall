@@ -1,5 +1,6 @@
 import re
 
+from django.db.models import Q
 from django.shortcuts import render
 
 # Create your views here.
@@ -24,6 +25,24 @@ class UsernameCountView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         count = User.objects.filter(username=username).count()
         data = {'username': username, 'count': count}
+        return Response(data)
+
+
+class AccountView(APIView):
+    """检查用户名或者手机号码是否可用"""
+
+    def get(self, request, pk):
+
+        account = User.objects.filter(Q(username=pk) | Q(mobile=pk))
+
+        data = {
+            'pk': pk,
+            'message': ''
+        }
+        if account.exists():
+            data['message'] = "用户已经注册，请更换用户名或者手机号码"
+        else:
+            data['message'] = "可以注册"
         return Response(data)
 
 

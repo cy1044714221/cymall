@@ -1,9 +1,13 @@
 from django.contrib import admin
 from .models import User, Address
+from django.contrib.auth.models import Group, Permission
 
 admin.site.site_header = 'CyMall 商城'
 admin.site.site_title = 'CyMall 商城-登录系统后台'
 admin.site.index_title = 'CyMall 商城-后台管理'
+
+
+
 
 
 @admin.register(User)
@@ -17,7 +21,7 @@ class UserAdmin(admin.ModelAdmin):
 
     list_max_show_all = 200  # default
 
-    list_per_page = 10
+    list_per_page = 25
 
     list_filter = ['is_active', 'email_active', 'is_staff']
 
@@ -50,4 +54,3 @@ class AddressAdmin(admin.ModelAdmin):
     # list_filter = ['is_deleted']
 
     actions_selection_counter = True
-    pass

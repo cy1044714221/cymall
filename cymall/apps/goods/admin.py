@@ -51,12 +51,19 @@ class GoodsSKUAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'name', ]
     list_editable = ['stock', 'sales', 'comments', 'is_launched', ]
     list_per_page = 10
-    actions_on_top = False
+    actions_on_top = True
     actions_on_bottom = False
     list_filter = ['category', 'is_launched', ]
     search_fields = ['name', 'caption', ]
     autocomplete_fields = ['goods', 'category',]
 
+    '''自定义actions'''
+    actions = ['setup_is_launched']
+
+    def setup_is_launched(self, request, queryset):
+        queryset.update(is_launched=True)
+
+    setup_is_launched.short_description = '上架所选的 商品SKU'
 
 @admin.register(SKUImage, )
 class GoodsSKUImageAdmin(admin.ModelAdmin):

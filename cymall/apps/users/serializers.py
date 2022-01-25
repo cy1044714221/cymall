@@ -49,14 +49,14 @@ class CreateUserSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError('两个密码不一致')
 
-        """校验短信验证码"""
-        redis_conn = get_redis_connection('sms_codes')
-        mobile = attrs['mobile']
-        real_sms_code = redis_conn.get('sms_%s' % mobile)
-        if real_sms_code is None:
-            raise serializers.ValidationError('短信验证码无效')
-        if attrs['sms_code'] != real_sms_code.decode():  # 验证码从redis取出需要解码, 如果为空不能decode()
-            raise serializers.ValidationError('验证码错误')
+        # """校验短信验证码"""
+        # redis_conn = get_redis_connection('sms_codes')
+        # mobile = attrs['mobile']
+        # real_sms_code = redis_conn.get('sms_%s' % mobile)
+        # if real_sms_code is None:
+        #     raise serializers.ValidationError('短信验证码无效')
+        # if attrs['sms_code'] != real_sms_code.decode():  # 验证码从redis取出需要解码, 如果为空不能decode()
+        #     raise serializers.ValidationError('验证码错误')
 
         """校验同意协议"""
         if attrs['allow'] != 'true':
