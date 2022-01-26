@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+# django.contrib.admin.options.ModelAdmin.add_view
 import datetime
 import os
 import sys
@@ -31,17 +32,20 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',  # UI后台界面
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',  # Django 管理文档生成器
 
     'rest_framework',
     'corsheaders',  # 跨域CORS
@@ -53,8 +57,7 @@ INSTALLED_APPS = [
     'oauth',  # qq用户登陆数据
     'areas',  # 地址模块
     'goods',  # 商品模块
-
-
+    'orders',  # 订单信息
 
 ]
 
@@ -100,7 +103,7 @@ DATABASES = {
         'PORT': 3306,  # 数据库端口
         'USER': 'root',  # 数据库用户名
         'PASSWORD': '123456',  # 数据库用户密码
-        'NAME': 'cymall_phoenix'  # 数据库名字
+        'NAME': 'cymall'  # 数据库名字
     }
 }
 
@@ -257,6 +260,7 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
     'http://localhost:8080',
+    'https://www.baidu.com',
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
@@ -288,7 +292,6 @@ REST_FRAMEWORK_EXTENSIONS = {
     'DEFAULT_USE_CACHE': 'default',
 }
 
-
 # django文件存储
 DEFAULT_FILE_STORAGE = 'cymall.utils.fastdfs.fafs_storage.FastDFSStorage'
 
@@ -296,7 +299,6 @@ DEFAULT_FILE_STORAGE = 'cymall.utils.fastdfs.fafs_storage.FastDFSStorage'
 FDFS_URL = 'http://192.168.0.104:8888/'
 # FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
 FDFS_CLIENT_CONF = '/Users/phoenix/Desktop/mall/cymall/utils/fastdfs/client.conf'
-
 
 # 富文本编辑器ckeditor配置
 CKEDITOR_CONFIGS = {
@@ -307,3 +309,52 @@ CKEDITOR_CONFIGS = {
     },
 }
 CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所以此处设为''
+
+# SIMPLEUI 后台管理界面配置
+SIMPLEUI_LOGO = 'https://www.baidu.com/img/flexible/logo/pc/result.png'  # 后台LOGO
+# 隐藏右侧SimpleUI广告链接和使用分析
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_ANALYSIS = False
+# 隐藏首页的快捷操作和最近动作
+# SIMPLEUI_HOME_QUICK = False
+# SIMPLEUI_HOME_ACTION = False
+# 修改左侧菜单首页设置
+# SIMPLEUI_HOME_PAGE = ''  # 指向页面
+# SIMPLEUI_HOME_TITLE = '欢迎您!' # 首页标题
+# SIMPLEUI_HOME_ICON = 'fa fa-code' # 首页图标
+
+# 设置右上角Home图标跳转链接，会以另外一个窗口打开
+SIMPLEUI_INDEX = 'http://127.0.0.1:8000/'
+
+SIMPLEUI_CONFIG = {
+    # 是否使用系统默认菜单。
+    'system_keep': True,
+
+    # 用于菜单排序和过滤, 不填此字段为默认排序和全部显示。 空列表[] 为全部不显示.
+   # 'menu_display': ['任务管理', '权限认证'],
+
+    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时刷新展示菜单内容。
+    # 一般建议关闭。
+    'dynamic': False,
+    'menus': [
+        {
+            'app': 'auth',
+            'name': '权限认证',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '用户列表',
+                    'icon': 'fa fa-users',
+                    'url': 'users/user/'
+                },
+                {
+                    'name': '用户组',
+                    'icon': 'fa fa-th-list',
+                    'url': 'auth/group/'
+                }
+            ]
+        },
+
+
+    ]
+}

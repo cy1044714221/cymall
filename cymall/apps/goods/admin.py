@@ -55,7 +55,7 @@ class GoodsSKUAdmin(admin.ModelAdmin):
     actions_on_bottom = False
     list_filter = ['category', 'is_launched', ]
     search_fields = ['name', 'caption', ]
-    autocomplete_fields = ['goods', 'category',]
+    autocomplete_fields = ['goods', 'category', ]
 
     '''自定义actions'''
     actions = ['setup_is_launched']
@@ -65,9 +65,10 @@ class GoodsSKUAdmin(admin.ModelAdmin):
 
     setup_is_launched.short_description = '上架所选的 商品SKU'
 
+
 @admin.register(SKUImage, )
 class GoodsSKUImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'sku',  'image']
-    list_display_links = ['id', 'sku',  ]
+    list_display = ['id', 'sku', 'image']
+    list_display_links = ['id', 'sku', ]
     actions_on_top = False
     actions_on_bottom = False

@@ -20,6 +20,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
+    path('admin/doc/', include('django.contrib.admindocs.urls')),  # Django 管理文档生成器
     path('admin/', admin.site.urls),
 
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),

@@ -28,7 +28,7 @@ class GoodsCategory(BaseModel):
 
 class Brand(BaseModel):
     """商品品牌"""
-    name = models.CharField(max_length=20, verbose_name='品牌名称')
+    name = models.CharField(max_length=20, unique=True, verbose_name='品牌名称')
     logo = models.ImageField(verbose_name='Logo图片')
 
     class Meta:
@@ -76,7 +76,6 @@ class SKU(BaseModel):
     is_launched = models.BooleanField(default=True, verbose_name='是否上架销售')
     default_image_url = models.CharField(max_length=200, default='', null=True, blank=True, verbose_name='默认图片')
 
-    # name  caption goods category price stock sales comments is_launched default_image_url
     class Meta:
         db_table = 'cy_goods_sku'
         verbose_name = '商品SKU'
