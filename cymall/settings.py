@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'areas',  # 地址模块
     'goods',  # 商品模块
     'orders',  # 订单信息
+    'payment',  # 支付
 
 ]
 
@@ -223,6 +224,13 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    "cart": {  # 购物车
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 # 异步任务队列 "redis://localhost:6379/7"
 
@@ -331,7 +339,7 @@ SIMPLEUI_CONFIG = {
     'system_keep': True,
 
     # 用于菜单排序和过滤, 不填此字段为默认排序和全部显示。 空列表[] 为全部不显示.
-   # 'menu_display': ['任务管理', '权限认证'],
+    # 'menu_display': ['任务管理', '权限认证'],
 
     # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时刷新展示菜单内容。
     # 一般建议关闭。
@@ -354,7 +362,6 @@ SIMPLEUI_CONFIG = {
                 }
             ]
         },
-
 
     ]
 }

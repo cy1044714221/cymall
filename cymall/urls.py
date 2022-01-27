@@ -35,6 +35,9 @@ urlpatterns = [
 
     path('oauth/', include('oauth.urls')),
 
-    path('', include('verifications.urls')),
-    path('', include('areas.urls')),
+    path('', include('verifications.urls')),  # 短信验证
+    path('', include('areas.urls')),  # 区域
+    path('', include('carts.urls')),  # 购物车
+    path('', include('orders.urls')),  # 订单
+    path('', include('payment.urls')),  # 支付
 ]

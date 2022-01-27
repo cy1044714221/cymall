@@ -1,7 +1,7 @@
 from django.db import models
 from goods.models import BaseModel
-
 from users.models import User, Address
+from goods.models import SKU
 
 
 class OrderInfo(BaseModel):
@@ -36,5 +36,15 @@ class OrderInfo(BaseModel):
 
 class OrderGoods(BaseModel):
     """订单商品信息"""
-    # 所属订单 商品sku  数量 单价 评价
-    order = models.ForeignKey('OrderInfo', on_delete=models.CASCADE, verbose_name='订单')
+    # 所属订单 商品sku  数量 单价
+    order_id = models.ForeignKey('OrderInfo', on_delete=models.CASCADE, verbose_name='订单编号')
+    sku_id = models.ForeignKey(SKU, on_delete=models.PROTECT, verbose_name='订单商品SKU')
+    count = models.IntegerField(default=1, verbose_name='数量')
+    price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='单价')
+
+    class Meta:
+        db_table = 'cy_order_goods'
+        verbose_name = '订单商品'
+        verbose_name_plural = verbose_name
+
+

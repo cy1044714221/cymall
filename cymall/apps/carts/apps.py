@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 
 
-class AreasConfig(AppConfig):
+class CartsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'areas'
-    verbose_name = '行政区域管理'
+    name = 'carts'
