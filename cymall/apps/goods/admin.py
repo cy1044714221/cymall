@@ -39,7 +39,7 @@ class GoodsBrandAdmin(admin.ModelAdmin):
 
 @admin.register(Goods, )
 class GoodsSPUAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'brand', 'category1', 'category2', 'category3', 'sales', 'comments']
+    list_display = ['id', 'name', 'brand', 'category1', 'category2', 'category3', 'sales', 'comments', ]
     list_display_links = ['id', 'name']
     list_editable = ['sales', 'comments']
     list_per_page = 10

@@ -46,5 +46,3 @@ class OrderGoods(BaseModel):
         db_table = 'cy_order_goods'
         verbose_name = '订单商品'
         verbose_name_plural = verbose_name
-
-

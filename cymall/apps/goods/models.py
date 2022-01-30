@@ -82,7 +82,7 @@ class SKU(BaseModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return '%s: %s' % (self.id, self.name)
+        return '%s %s %s' % (self.id, self.goods,  self.name)
 
 
 class SKUImage(BaseModel):
