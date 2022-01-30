@@ -1,7 +1,17 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import SKU, SKUImage, Goods, Brand, GoodsCategory
+
+
+class SKUInline(admin.TabularInline):
+    model = SKU
+    fk_name = 'goods'
+    extra = 3
+
+
+class SKUImageInline(admin.TabularInline):
+    model = SKUImage
+    fk_name = 'sku'
+    extra = 3
 
 
 @admin.register(GoodsCategory, )
@@ -15,7 +25,6 @@ class GoodsCategoryAdmin(admin.ModelAdmin):
     list_filter = ['parent']
     search_fields = ['id', 'name', 'parent']
     autocomplete_fields = ['parent']
-    # raw_id_fields = ("parent",)
 
 
 @admin.register(Brand, )
@@ -26,8 +35,6 @@ class GoodsBrandAdmin(admin.ModelAdmin):
     actions_on_top = False
     actions_on_bottom = False
     search_fields = ['id', 'name']
-    # autocomplete_fields = ['parlogoent']
-    # raw_id_fields = ("parent",)
 
 
 @admin.register(Goods, )
@@ -41,7 +48,8 @@ class GoodsSPUAdmin(admin.ModelAdmin):
     list_filter = ['brand', 'category1', ]
     search_fields = ['name', 'brand', 'category1', 'category2', 'category3', ]
     autocomplete_fields = ['brand', 'category1', 'category2', 'category3', ]
-    # raw_id_fields = ("parent",)
+
+    inlines = [SKUInline]
 
 
 @admin.register(SKU, )
@@ -64,6 +72,7 @@ class GoodsSKUAdmin(admin.ModelAdmin):
         queryset.update(is_launched=True)
 
     setup_is_launched.short_description = '上架所选的 商品SKU'
+    inlines = [SKUImageInline]
 
 
 @admin.register(SKUImage, )

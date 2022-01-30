@@ -13,13 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import xadmin
 from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
+    path('admin/', include('operationaldata.urls')),  # 自定义后台数据
     path('admin/doc/', include('django.contrib.admindocs.urls')),  # Django 管理文档生成器
     path('admin/', admin.site.urls),
 
@@ -40,4 +40,5 @@ urlpatterns = [
     path('', include('carts.urls')),  # 购物车
     path('', include('orders.urls')),  # 订单
     path('', include('payment.urls')),  # 支付
+
 ]

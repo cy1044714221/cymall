@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class GoodsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'goods'
-    verbose_name = '2-商品信息'
+    verbose_name = '商品信息'

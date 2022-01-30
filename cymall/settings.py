@@ -78,7 +78,7 @@ ROOT_URLCONF = 'cymall.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -319,7 +319,7 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所以此处设为''
 
 # SIMPLEUI 后台管理界面配置
-SIMPLEUI_LOGO = 'https://www.baidu.com/img/flexible/logo/pc/result.png'  # 后台LOGO
+SIMPLEUI_LOGO = 'http://124.223.90.3:8888/group1/M00/00/00/CgAEA2H1PyWAI_3tAABCMxi1IdU7837229'  # 后台LOGO
 # 隐藏右侧SimpleUI广告链接和使用分析
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
@@ -339,29 +339,35 @@ SIMPLEUI_CONFIG = {
     'system_keep': True,
 
     # 用于菜单排序和过滤, 不填此字段为默认排序和全部显示。 空列表[] 为全部不显示.
-    # 'menu_display': ['任务管理', '权限认证'],
+    'menu_display': ['运营管理', '订单信息', '商品管理', '品牌分类', '地区区域', '用户组权限'],
 
     # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时刷新展示菜单内容。
     # 一般建议关闭。
-    'dynamic': False,
+    'dynamic': True,
     'menus': [
-        {
-            'app': 'auth',
-            'name': '权限认证',
-            'icon': 'fas fa-user-shield',
-            'models': [
-                {
-                    'name': '用户列表',
-                    'icon': 'fa fa-users',
-                    'url': 'users/user/'
-                },
-                {
-                    'name': '用户组',
-                    'icon': 'fa fa-th-list',
-                    'url': 'auth/group/'
-                }
-            ]
-        },
+        {'app': 'auth', 'name': '用户组权限', 'icon': 'fas fa-user-shield',
+         'models': [
+             {'name': '用户管理', 'icon': 'fa fa-th-list', 'url': 'users/user/'},
+             {'name': '用户组', 'icon': 'fa fa-th-list', 'url': 'auth/group/'},
+         ]},
+
+        {'app': 'goods', 'name': '商品管理', 'icon': 'fas fa-user-shield', 'url': 'goods/goods/'},
+        {'app': 'goods', 'name': '订单信息', 'icon': 'fas fa-user-shield', 'url': 'orders/orderinfo/'},
+        {'app': 'goods', 'name': '地区区域', 'icon': 'fas fa-user-shield', 'url': 'areas/area/'},
+
+        {'app': 'goods', 'name': '品牌分类', 'icon': 'fas fa-user-shield',
+         'models': [
+             {'name': '品牌管理', 'icon': 'fa fa-users', 'url': 'goods/brand/'},
+             {'name': '分类管理', 'icon': 'fa fa-th-list', 'url': 'goods/goodscategory/'},
+         ]},
+
+        {'app': 'goods', 'name': '运营管理', 'icon': 'fas fa-user-shield',
+         'models': [
+             {'name': '运营状态', 'icon': 'fa fa-users', 'url': 'operationaldata/state'},
+         ]},
 
     ]
 }
+
+# 静态文件收集
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

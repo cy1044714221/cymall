@@ -36,4 +36,4 @@ class Address(models.Model):
         ordering = ['-update_date']
 
     def __str__(self):
-        return self.addressee
+        return '%s %s %s %s %s %s' % (self.addressee, self.mobile, self.province, self.city, self.district, self.place)

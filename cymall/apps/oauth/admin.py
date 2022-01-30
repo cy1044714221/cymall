@@ -6,4 +6,4 @@ from .models import OAuthQQUser
 
 @admin.register(OAuthQQUser, )
 class OAuthQQUserAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__',)
