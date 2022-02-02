@@ -104,14 +104,17 @@ class AddressView(APIView):
     def get(self, request):
         """获取用户地址信息"""
         default_address = request.user.default_address
-        address = Address.objects.filter(user=request.user.id, is_deleted=False)
-        serializer = AddressSerializer(address, many=True)
-        data = {
-            'user_id': request.user.id,
-            'default_address': default_address.id,
-            'addresses': serializer.data
-        }
-        return Response(data)
+        if default_address is None:
+            return Response({'message':'用户地址为空，请添加'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            address = Address.objects.filter(user=request.user.id, is_deleted=False)
+            serializer = AddressSerializer(address, many=True)
+            data = {
+                'user_id': request.user.id,
+                'default_address': default_address.id,
+                'addresses': serializer.data
+            }
+            return Response(data)
 
 
 class AddressDetailView(UpdateAPIView):
