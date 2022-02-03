@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import SKU, SKUImage, Goods, Brand, GoodsCategory
-
+from django.utils.html import format_html
 
 class SKUInline(admin.TabularInline):
     model = SKU
@@ -29,13 +29,16 @@ class GoodsCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Brand, )
 class GoodsBrandAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'logo']
+    list_display = ['id', 'logo_image', 'name', 'logo']
     list_display_links = ['id', 'name', 'logo']
     list_per_page = 10
     actions_on_top = False
     actions_on_bottom = False
     search_fields = ['id', 'name']
 
+
+    def logo_image(self, obj):
+        return format_html('<img src="%s" height="50" />' % obj.logo.url)
 
 @admin.register(Goods, )
 class GoodsSPUAdmin(admin.ModelAdmin):
@@ -77,7 +80,11 @@ class GoodsSKUAdmin(admin.ModelAdmin):
 
 @admin.register(SKUImage, )
 class GoodsSKUImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'sku', 'image']
+    list_display = ['id', 'image_dispaly', 'sku', 'image', ]
     list_display_links = ['id', 'sku', ]
     actions_on_top = False
     actions_on_bottom = False
+
+    # 定义后台显示skuimage图片
+    def image_dispaly(self, obj):
+        return format_html('<img src="%s" height="80" />' % obj.image.url)

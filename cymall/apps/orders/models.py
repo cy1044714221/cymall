@@ -33,6 +33,9 @@ class OrderInfo(BaseModel):
         verbose_name = '订单基本信息'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.order_id
+
 
 class OrderGoods(BaseModel):
     """订单商品信息"""
@@ -46,3 +49,22 @@ class OrderGoods(BaseModel):
         db_table = 'cy_order_goods'
         verbose_name = '订单商品'
         verbose_name_plural = verbose_name
+
+
+class OrderComment(BaseModel):
+    """订单评价"""
+    SCORE_CHOICES = {
+        (1, '差'),
+        (2, '不满意'),
+        (3, '一般'),
+        (4, '满意'),
+        (5, '非常满意'),
+    }
+    order_id = models.ForeignKey('OrderInfo', on_delete=models.CASCADE, verbose_name='订单编号')
+    score = models.SmallIntegerField(choices=SCORE_CHOICES, default=5, verbose_name='满意度评分')
+
+    class Meta:
+        db_table = 'cy_order_comments'
+        verbose_name = '订单评价'
+        verbose_name_plural = verbose_name
+

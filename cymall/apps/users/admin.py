@@ -7,7 +7,6 @@ admin.site.site_title = 'CyMall 商城-登录系统后台'
 admin.site.index_title = 'CyMall 商城-后台管理'
 
 
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['id', 'username', 'mobile', 'email', 'is_staff', 'last_login', 'is_active',

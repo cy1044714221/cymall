@@ -4,7 +4,8 @@ from . import views
 
 urlpatterns = [
 
-    path('operationaldata/state', views.stateboard),
+    path('operationaldata/all_data', views.all_data),
+    path('operationaldata/today_data', views.today_data),
 
 
 
