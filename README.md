@@ -6,6 +6,7 @@
 
 ## users 用户目录
 
+![UML 图 (1)](https://user-images.githubusercontent.com/33458444/152381810-f4f0f552-e7b0-435d-a181-cc8c1883f903.jpg)
 
 
 
@@ -17,7 +18,9 @@
 
 # QQ登陆
 
-![img](blob:https://j5i7905ar3.feishu.cn/b9141819-cdd4-4c06-b9de-a939a06ba188)
+![UML 图 (2)](https://user-images.githubusercontent.com/33458444/152381721-e9da8707-fdb8-4fb2-97c8-a2b9e82e8240.jpg)
+
+![流程图 (2)](https://user-images.githubusercontent.com/33458444/152381794-4c781fbd-fb45-49be-b7e6-db4725c821de.jpg)
 
 
 # 部署
