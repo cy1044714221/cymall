@@ -31,7 +31,7 @@ class GoodsCategoryAdmin(admin.ModelAdmin):
 class GoodsBrandAdmin(admin.ModelAdmin):
     list_display = ['id', 'logo_image', 'name', 'logo']
     list_display_links = ['id', 'name', 'logo']
-    list_per_page = 10
+    list_per_page = 5
     actions_on_top = False
     actions_on_bottom = False
     search_fields = ['id', 'name']
@@ -82,6 +82,7 @@ class GoodsSKUAdmin(admin.ModelAdmin):
 class GoodsSKUImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'image_dispaly', 'sku', 'image', ]
     list_display_links = ['id', 'sku', ]
+
     actions_on_top = False
     actions_on_bottom = False
 

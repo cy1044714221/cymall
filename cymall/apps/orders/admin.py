@@ -10,12 +10,13 @@ class OrderGoodsInfoStackedInline(admin.TabularInline):
 
 @admin.register(OrderInfo, )
 class OrderInfoAdmin(admin.ModelAdmin):
-    list_display = ('order_id', 'user', 'address', 'total_count', 'total_amount', 'pay_method', 'order_status')
+    list_display = ('create_date', 'order_id', 'user', 'address', 'total_count', 'total_amount', 'pay_method', 'order_status')
+    list_display_links = ['order_id']
     readonly_fields = ('order_id', 'user', 'pay_method', 'total_count',)
     list_filter = ('pay_method', 'order_status')
     fields = ('order_id', 'user', 'address', 'total_count', 'total_amount', 'pay_method', 'order_status')
     inlines = [OrderGoodsInfoStackedInline]
-    list_per_page = 20
+    list_per_page = 15
 
 
 @admin.register(OrderGoods, )
@@ -25,4 +26,4 @@ class OrderGoodsInfoAdmin(admin.ModelAdmin):
 
 @admin.register(OrderComment, )
 class OrderCommentAdmin(admin.ModelAdmin):
-    list_display = ['order_id', 'score']
+    list_display = ['order_id', 'score', 'content']

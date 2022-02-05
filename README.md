@@ -4,7 +4,7 @@
 
 # 应用介绍
 
-## users 用户目录
+
 
 
 
@@ -14,10 +14,29 @@
 507  DatabaseError / RedisError
 503 QQ 服务器异常
 
-
 # QQ登陆
 
-![img](blob:https://j5i7905ar3.feishu.cn/b9141819-cdd4-4c06-b9de-a939a06ba188)
+
+
+![流程图 (2)](/Users/phoenix/Downloads/流程图 (2).jpg)
+
+
+
+![UML 图 (2)](/Users/phoenix/Downloads/UML 图 (2).jpg)
+
+
+
+
+
+# 架构
+
+
+
+![UML 图 (1)](/Users/phoenix/Downloads/UML 图 (1).jpg)
+
+![未命名](/Users/phoenix/Desktop/未命名.jpg)
+
+
 
 
 # 部署

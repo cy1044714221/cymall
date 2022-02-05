@@ -62,6 +62,7 @@ class OrderComment(BaseModel):
     }
     order_id = models.ForeignKey('OrderInfo', on_delete=models.CASCADE, verbose_name='订单编号')
     score = models.SmallIntegerField(choices=SCORE_CHOICES, default=5, verbose_name='满意度评分')
+    content = models.CharField(max_length=200, default='', null=True, verbose_name='评价内容')
 
     class Meta:
         db_table = 'cy_order_comments'
