@@ -4,8 +4,9 @@
 
 # 应用介绍
 
+## users 用户目录
 
-
+![UML 图 (1)](https://user-images.githubusercontent.com/33458444/152381810-f4f0f552-e7b0-435d-a181-cc8c1883f903.jpg)
 
 
 
@@ -14,29 +15,12 @@
 507  DatabaseError / RedisError
 503 QQ 服务器异常
 
+
 # QQ登陆
 
+![UML 图 (2)](https://user-images.githubusercontent.com/33458444/152381721-e9da8707-fdb8-4fb2-97c8-a2b9e82e8240.jpg)
 
-
-![流程图 (2)](/Users/phoenix/Downloads/流程图 (2).jpg)
-
-
-
-![UML 图 (2)](/Users/phoenix/Downloads/UML 图 (2).jpg)
-
-
-
-
-
-# 架构
-
-
-
-![UML 图 (1)](/Users/phoenix/Downloads/UML 图 (1).jpg)
-
-![未命名](/Users/phoenix/Desktop/未命名.jpg)
-
-
+![流程图 (2)](https://user-images.githubusercontent.com/33458444/152381794-4c781fbd-fb45-49be-b7e6-db4725c821de.jpg)
 
 
 # 部署
