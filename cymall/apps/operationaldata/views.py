@@ -1,110 +1,22 @@
+import json
 from datetime import timedelta
 
 import pandas as pd
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
-
-import json
-
-from django.shortcuts import render, redirect
-from pyecharts import options as opts
-from pyecharts.charts import Bar, Line, Geo, Grid
-from django.utils import timezone
-from users.models import User
-from orders.models import OrderInfo
-from users.models import Address
-
 from areas.models import Area
+from django.db.models import Sum
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from orders.models import OrderInfo
+from pyecharts import options as opts
+from pyecharts.charts import Bar, Geo, Grid
+from users.models import Address
+from users.models import User
 
 
-def index(request):
-    title = '标题222'
-    legends = ['销量']
-    tt = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-    return render(request, 'operationaldata/index.html', locals())
-
-
-# 校验用户登陆 / 是否有管理员权限
-def Check_Login_isstaff(func):
-    def warpper(request):
-        if not request.user.is_staff and not request.user.is_authenticated:
-            return redirect('admin/login/?next=%s' % request.path)
-        else:
-            return func(request)
-
-    return warpper
-
-
-# 此处 前后端分离应该写在一个函数中，否则查询两次， 后期优化修改  定义两个相同的变量名会导致数据一样
-# 今日运营数据
-today = timezone.now().date()  # 今日数据
-or_qs = OrderInfo.objects.filter(create_date__gt=today).values_list('create_date', 'total_count', 'total_amount',
-                                                                    'order_status')
-df = pd.DataFrame(list(or_qs), columns=['create_date', 'total_count', 'total_amount', 'order_status'])
-df['hours'] = df['create_date'].dt.strftime('%H')
-s1 = df.groupby('hours').agg(total_count=('total_count', 'sum'), total_amount=('total_amount', 'sum'))
-
-
-@Check_Login_isstaff
-def todays_data(request):
-    total_order_count = df['total_count'].sum()
-    gmv = df['total_amount'].sum()
-    user_count = User.objects.filter(date_joined__gt=today).count()
-    print(locals())
-    return render(request, 'operationaldata/todays_data.html', locals())
-
-
-@Check_Login_isstaff
-def todays_charts(request):
-    todays_charts = (
-        Bar()
-            .add_xaxis([str(x) + '时' for x in s1.index.to_list()])
-            .add_yaxis("销量", [x for x in s1.total_count.to_list()])
-            .add_yaxis("销售额", [x for x in s1.total_amount.to_list()])
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(
-            toolbox_opts=opts.ToolboxOpts(is_show=True),
-            title_opts=opts.TitleOpts(title="销量/销售额", subtitle="数据更新日期：" + timezone.now().__str__()),
-            brush_opts=opts.BrushOpts(), )
-            .dump_options_with_quotes()
-    )
-    return JsonResponse(json.loads(todays_charts))
-
-
-# 昨日运营数据
-yesterday = timezone.now().date() + timedelta(days=-1)  # 昨日数据
-or_qs2 = OrderInfo.objects.filter(create_date__date=yesterday).values_list('create_date', 'total_count', 'total_amount',
-                                                                           'order_status')
-df2 = pd.DataFrame(list(or_qs2), columns=['create_date', 'total_count', 'total_amount', 'order_status'])
-df2['hours'] = df2['create_date'].dt.strftime('%H')
-s2 = df2.groupby('hours').agg(total_count=('total_count', 'sum'), total_amount=('total_amount', 'sum'))
-
-
-@Check_Login_isstaff
-def yesterday_data(request):
-    total_order_count = df2['total_count'].sum()
-    gmv = df2['total_amount'].sum()
-    user_count = User.objects.filter(date_joined__gt=yesterday).count()
-    return render(request, 'operationaldata/yesterday_data.html', locals())
-
-
-@Check_Login_isstaff
-def yesterday_charts(request):
-    c = (
-        Bar()
-            .add_xaxis([str(x) + '时' for x in s2.index.to_list()])
-            .add_yaxis("销量", [x for x in s2.total_count.to_list()])
-            .add_yaxis("销售额", [x for x in s2.total_amount.to_list()])
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(
-            toolbox_opts=opts.ToolboxOpts(is_show=True),
-            title_opts=opts.TitleOpts(title="销量/销售额", subtitle="数据更新日期：" + timezone.now().__str__()),
-            brush_opts=opts.BrushOpts(), )
-            .dump_options_with_quotes()
-    )
-    return JsonResponse(json.loads(c))
-
+# ------------------------------------ #
+# ------pyecharts生成图标数据格式-------- #
+# ------------------------------------ #
 
 def response_as_json(data):
     json_str = json.dumps(data)
@@ -127,8 +39,61 @@ def json_response(data, code=200):
 
 JsonResponse = json_response
 
-# 用户数据图标 -------------------------------
 
+# 校验用户登陆 / 是否有管理员权限
+def Check_Login_isstaff(func):
+    def warpper(request, dt):
+        if not request.user.is_staff and not request.user.is_authenticated:
+            return redirect('admin/login/?next=%s' % request.path)
+        else:
+            return func(request, dt)
+
+    return warpper
+
+
+@Check_Login_isstaff
+def dt_data(request, dt):
+    if dt == 'today':
+        dt = timezone.now().date()
+        template = 'operationaldata/dt_data.html'
+    elif dt == 'yesterday':
+        dt = timezone.now().date() + timedelta(days=-1)  # 昨日数据
+        template = 'operationaldata/yesterday_data.html'  # 这里应该修改模板 url为变量
+    gmv = OrderInfo.objects.filter(create_date__date=dt).aggregate(Sum('total_amount'))['total_amount__sum']
+    order_count = OrderInfo.objects.filter(create_date__gt=dt).count()
+    user_count = User.objects.filter(date_joined__gt=dt).count()
+    return render(request, template, locals())
+
+
+@Check_Login_isstaff
+def dt_charts(request, dt):
+    if dt == 'today':
+        dt = timezone.now().date()
+    elif dt == 'yesterday':
+        dt = timezone.now().date() + timedelta(days=-1)  # 昨日数据
+
+    or_qs = OrderInfo.objects.filter(create_date__date=dt).values_list('create_date', 'total_count', 'total_amount',
+                                                                       'order_status')
+    df = pd.DataFrame(list(or_qs), columns=['create_date', 'total_count', 'total_amount', 'order_status'])
+    df['hours'] = df['create_date'].dt.strftime('%H')
+    s1 = df.groupby('hours').agg(total_count=('total_count', 'sum'), total_amount=('total_amount', 'sum'))
+
+    charts = (
+        Bar()
+            .add_xaxis([str(x) + '时' for x in s1.index.to_list()])
+            .add_yaxis("销量(件)", [x for x in s1.total_count.to_list()])
+            .add_yaxis("销售额(万元)", [round(x / 10000, 2) for x in s1.total_amount.to_list()])
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+            .set_global_opts(
+            toolbox_opts=opts.ToolboxOpts(is_show=True),
+            title_opts=opts.TitleOpts(title="销量/销售额", subtitle="数据更新日期：" + timezone.now().__str__()),
+            brush_opts=opts.BrushOpts(), )
+            .dump_options_with_quotes()
+    )
+    return JsonResponse(json.loads(charts))
+
+
+# 全部用户消费地图
 order_qs = OrderInfo.objects.all().values_list('address', flat=True)
 order_qs = list(order_qs)
 address_qs = Address.objects.filter(id__in=order_qs).values_list('province', flat=True)
@@ -140,16 +105,13 @@ areas_df = pd.DataFrame(list(areas), columns=['id', 'name'])
 
 df4 = pd.merge(df3, areas_df, how='inner')
 
-s4 = df4.groupby('name').agg(sales=('name','count')).reset_index()
-
+s4 = df4.groupby('name').agg(sales=('name', 'count')).reset_index()
 
 
 def user_data(request):
     """ 总用户数量。。。。。"""
     return render(request, 'operationaldata/user_data.html')
 
-
-from pyecharts.faker import Faker
 
 def user_charts(request):
     bar = (

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <title>控制面板</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- Theme style -->
+    <link href="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://adminlte.io/themes/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://assets.pyecharts.org/assets/echarts.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ gmv }}</h3>
+
+                            <p>销售额</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a class="small-box-footer" href="#">更多信息 <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-sm-4">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ order_count }}</h3>
+                            <p>订单数量</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a class="small-box-footer" href="#">更多信息 <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-sm-4">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ user_count }}</h3>
+
+                            <p>新增用户数</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a class="small-box-footer" href="#">更多信息 <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="todays_charts" style="width:100%; height: 600px;"></div>
+                    <script>
+                        var chart = echarts.init(document.getElementById('todays_charts'), 'white', {
+                            renderer: 'canvas'
+                        });
+
+                        $(
+                            function () {
+                                fetchData(chart);
+                            }
+                        );
+
+                        function fetchData() {
+                            $.ajax({
+                                type: "GET",
+                                url: "http://127.0.0.1:8000/admin/operationaldata/dt_charts/today",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result.data);
+                                }
+                            });
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
